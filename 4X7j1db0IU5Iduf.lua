@@ -10794,7 +10794,7 @@ end
 -- Engine finished starting: tell the main script and report any statement that failed.
 FapDefenseEnv.Ready = true
 if #FapDefenseErrors > 0 then
-    FapDefenseWindow:Notify("DEFENSE", "Defense engine ready, but " .. #FapDefenseErrors .. " start-up steps failed. See the console.", 8)
+    warn("[fapta] DEFENSE engine ready, but " .. #FapDefenseErrors .. " start-up steps failed.")
 end
 ]=====]
 
@@ -10804,13 +10804,11 @@ end
         local compiled, compileError = loadstring(ENGINE_SOURCE, "=FAPTA_DEFENSE")
         if not compiled then
             warn("[fapta] DEFENSE engine compile error:", compileError)
-            Window:Notify("DEFENSE", "Engine compile error: " .. tostring(compileError):sub(1, 140), 10)
             return
         end
         local ok, runtimeError = pcall(compiled)
         if not ok then
             warn("[fapta] DEFENSE engine error:", runtimeError)
-            Window:Notify("DEFENSE", "Engine error: " .. tostring(runtimeError):sub(1, 140), 10)
         end
     end)
 end)()
