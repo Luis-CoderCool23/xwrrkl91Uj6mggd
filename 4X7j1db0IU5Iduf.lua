@@ -1917,16 +1917,19 @@ Window._OthersTab:AddSlider("Spotlight Radius", {
 end)
 -- STAFF ROLL tab
 -- Keep the language selector as the first visible component in this tab.
+Window._FaptaLanguageStartup = true
 Window._FaptaLanguageDropdown = StaffTab:AddDropdown(
     "Language / 言語",
     { "English (Current)", "日本語" },
     function(option)
         Window:_FaptaSetLanguage(option == "日本語" and "Japanese" or "English")
-        Window:Notify(
-            "LANGUAGE",
-            option == "日本語" and "Japanese UI selected" or "English UI selected",
-            3
-        )
+        if not Window._FaptaLanguageStartup then
+            Window:Notify(
+                "LANGUAGE",
+                option == "日本語" and "Japanese UI selected" or "English UI selected",
+                3
+            )
+        end
     end
 )
 StaffTab:AddSection("-- STAFF ROLL --")
@@ -10792,18 +10795,11 @@ end
 FapDefenseEnv.Ready = true
 if #FapDefenseErrors > 0 then
     FapDefenseWindow:Notify("DEFENSE", "Defense engine ready, but " .. #FapDefenseErrors .. " start-up steps failed. See the console.", 8)
-else
-    FapDefenseWindow:Notify("DEFENSE", "Defense engine ready", 3)
 end
 ]=====]
 
     local env = { Window = Window, Controls = controls, Ready = false }
     getgenv().__FAPTA_DEFENSE_ENV = env
-    task.delay(30, function()
-        if not env.Ready then
-            Window:Notify("DEFENSE", "Defense engine is still starting (waiting for game objects)", 8)
-        end
-    end)
     task.spawn(function()
         local compiled, compileError = loadstring(ENGINE_SOURCE, "=FAPTA_DEFENSE")
         if not compiled then
@@ -11753,6 +11749,9 @@ FolderDropdown:Set(selectedFolderOption)
 GiantModeDropdown:Set(giantMode)
 SpotlightTypeDropdown:Set(SPOTLIGHT_OPTIONS)
 Window._FaptaLanguageDropdown:Set("English (Current)")
+task.delay(1, function()
+    Window._FaptaLanguageStartup = false
+end)
 Window:Notify("Console", "0 s error exist", 5)
 
 -- UI width: the window is made 30 px wider with Window:SetSize (HertaIX).
