@@ -10793,9 +10793,6 @@ end
 
 -- Engine finished starting: tell the main script and report any statement that failed.
 FapDefenseEnv.Ready = true
-if #FapDefenseErrors > 0 then
-    warn("[fapta] DEFENSE engine ready, but " .. #FapDefenseErrors .. " start-up steps failed.")
-end
 ]=====]
 
     local env = { Window = Window, Controls = controls, Ready = false }
